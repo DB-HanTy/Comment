@@ -1,7 +1,7 @@
 package com.hty.comment.utils;
 
 /**
- * @author 虎哥
+ * 正则表达式
  */
 public abstract class RegexPatterns {
     /**

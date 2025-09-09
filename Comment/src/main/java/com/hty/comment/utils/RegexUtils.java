@@ -3,7 +3,7 @@ package com.hty.comment.utils;
 import cn.hutool.core.util.StrUtil;
 
 /**
- * @author 虎哥
+ * 正则相关工具类
  */
 public class RegexUtils {
     /**

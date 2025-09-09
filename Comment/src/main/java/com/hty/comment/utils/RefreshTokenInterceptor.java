@@ -14,6 +14,9 @@ import java.util.concurrent.TimeUnit;
 import static com.hty.comment.utils.RedisConstants.LOGIN_USER_KEY;
 import static com.hty.comment.utils.RedisConstants.LOGIN_USER_TTL;
 
+/**
+ * 刷新token拦截器
+ */
 public class RefreshTokenInterceptor implements HandlerInterceptor {
 
     private StringRedisTemplate stringRedisTemplate;

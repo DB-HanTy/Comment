@@ -24,4 +24,4 @@ mybatis-plus:
   type-aliases-package: com.hty.comment.entity
 logging:
   level:
-    com.hmdp: debug
+    com.hty.comment: debug
