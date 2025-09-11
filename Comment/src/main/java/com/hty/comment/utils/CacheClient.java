@@ -29,10 +29,12 @@ public class CacheClient {
         this.stringRedisTemplate = stringRedisTemplate;
     }
 
+    // 时间过期
     public void set(String key, Object value, Long time, TimeUnit unit) {
         stringRedisTemplate.opsForValue().set(key, JSONUtil.toJsonStr(value), time, unit);
     }
 
+    // 逻辑过期
     public void setWithLogicalExpire(String key, Object value, Long time, TimeUnit unit) {
         // 设置逻辑过期
         RedisData redisData = new RedisData();
@@ -42,7 +44,9 @@ public class CacheClient {
         stringRedisTemplate.opsForValue().set(key, JSONUtil.toJsonStr(redisData));
     }
 
+    // 缓存空值解决缓存穿透
     public <R,ID> R queryWithPassThrough(
+            //返回类型不确定用泛型
             String keyPrefix, ID id, Class<R> type, Function<ID, R> dbFallback, Long time, TimeUnit unit){
         String key = keyPrefix + id;
         // 1.从redis查询商铺缓存
@@ -72,6 +76,8 @@ public class CacheClient {
         return r;
     }
 
+
+    // 逻辑过期解决缓存击穿
     public <R, ID> R queryWithLogicalExpire(
             String keyPrefix, ID id, Class<R> type, Function<ID, R> dbFallback, Long time, TimeUnit unit) {
         String key = keyPrefix + id;
@@ -117,6 +123,7 @@ public class CacheClient {
         return r;
     }
 
+    // 互斥锁解决缓存击穿
     public <R, ID> R queryWithMutex(
             String keyPrefix, ID id, Class<R> type, Function<ID, R> dbFallback, Long time, TimeUnit unit) {
         String key = keyPrefix + id;
@@ -166,11 +173,13 @@ public class CacheClient {
         return r;
     }
 
+    // 尝试互斥锁
     private boolean tryLock(String key) {
         Boolean flag = stringRedisTemplate.opsForValue().setIfAbsent(key, "1", 10, TimeUnit.SECONDS);
         return BooleanUtil.isTrue(flag);
     }
 
+    // 释放锁
     private void unlock(String key) {
         stringRedisTemplate.delete(key);
     }
