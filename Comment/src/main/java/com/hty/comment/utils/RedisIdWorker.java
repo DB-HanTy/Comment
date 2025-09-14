@@ -7,12 +7,15 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * 雪花算法实现全局唯一ID
+ */
 @Component
 public class RedisIdWorker {
     /**
      * 开始时间戳
      */
-    private static final long BEGIN_TIMESTAMP = 1640995200L;
+    private static final long BEGIN_TIMESTAMP = 1757808000L;//2025-9-14 00:00:00
     /**
      * 序列号的位数
      */
@@ -39,4 +42,5 @@ public class RedisIdWorker {
         // 3.拼接并返回
         return timestamp << COUNT_BITS | count;
     }
+
 }
