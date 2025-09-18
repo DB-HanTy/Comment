@@ -6,4 +6,6 @@ import com.hty.comment.entity.VoucherOrder;
 
 public interface IVoucherOrderService extends IService<VoucherOrder> {
     Result seckillVoucher(Long voucherId);
+
+    Result createVouvherOrder(Long voucherId);
 }
