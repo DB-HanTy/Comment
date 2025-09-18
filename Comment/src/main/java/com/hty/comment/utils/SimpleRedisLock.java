@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class SimpleRedisLock implements ILock {
 
-    private String name;
+    private String name;//业务以及锁的名称
     private StringRedisTemplate stringRedisTemplate;
 
     public SimpleRedisLock(String name, StringRedisTemplate stringRedisTemplate) {
@@ -36,7 +36,7 @@ public class SimpleRedisLock implements ILock {
         // 获取锁
         Boolean success = stringRedisTemplate.opsForValue()
                 .setIfAbsent(KEY_PREFIX + name, threadId, timeoutSec, TimeUnit.SECONDS);
-        return Boolean.TRUE.equals(success);
+        return Boolean.TRUE.equals(success);//避免空指针，空指针返回 false
     }
 
     @Override

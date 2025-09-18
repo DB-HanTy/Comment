@@ -8,8 +8,10 @@ import com.hty.comment.mapper.VoucherOrderMapper;
 import com.hty.comment.service.ISeckillVoucherService;
 import com.hty.comment.service.IVoucherOrderService;
 import com.hty.comment.utils.RedisIdWorker;
+import com.hty.comment.utils.SimpleRedisLock;
 import com.hty.comment.utils.UserHolder;
 import org.springframework.aop.framework.AopContext;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,9 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
 
     @Resource
     private RedisIdWorker redisIdWorker;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public Result seckillVoucher(Long voucherId) {
@@ -45,10 +50,22 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
         }
         //确保提交完订单后再释放锁
         Long userId = UserHolder.getUser().getId();
-        synchronized (userId.toString().intern()) {//悲观锁，锁定用户id
+        //创建锁对象
+        SimpleRedisLock lock = new SimpleRedisLock("order:" + userId, stringRedisTemplate);
+        //获取锁
+        boolean isLock = lock.tryLock(1200);
+        //判断是否获取锁成功
+        if (isLock){
+            //获取锁失败，返回错误或重试
+            return Result.fail("不允许重复下单");
+        }
+        try {
             //获取代理对象,以使事务生效
             IVoucherOrderService proxy = (IVoucherOrderService) AopContext.currentProxy();
             return proxy.createVouvherOrder(voucherId);
+        }finally {
+            //释放锁
+            lock.unlock();
         }
     }
 
