@@ -22,7 +22,8 @@ public class SimpleRedisLock implements ILock {
 
     private static final String KEY_PREFIX = "lock:";
     private static final String ID_PREFIX = UUID.randomUUID().toString(true) + "-";
-    private static final DefaultRedisScript<Long> UNLOCK_SCRIPT;
+    private static final DefaultRedisScript<Long> UNLOCK_SCRIPT;//释放锁的脚本
+    // 创建一个静态常量，用于释放锁的脚本
     static {
         UNLOCK_SCRIPT = new DefaultRedisScript<>();
         UNLOCK_SCRIPT.setLocation(new ClassPathResource("unlock.lua"));
@@ -47,6 +48,7 @@ public class SimpleRedisLock implements ILock {
                 Collections.singletonList(KEY_PREFIX + name),
                 ID_PREFIX + Thread.currentThread().getId());
     }
+    // 解决互斥锁误删问题
     /*@Override
     public void unlock() {
         // 获取线程标示
