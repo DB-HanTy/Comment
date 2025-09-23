@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RedissionConfig {
+public class RedissonConfig {
 
     @Bean
-    public RedissonClient redissionClient(){
+    public RedissonClient redissonClient(){
         //配置
         Config config = new Config();
         config.useSingleServer().setAddress("redis://192.168.85.133:6379").setPassword("123456");
