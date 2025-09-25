@@ -3,11 +3,7 @@ package com.hty.comment.controller;
 
 import com.hty.comment.dto.Result;
 import com.hty.comment.service.IFollowService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -19,11 +15,11 @@ public class FollowController {
     @Resource
     private IFollowService followService;
     @PutMapping("/{id}/{isFollow}")
-    public Result follow(@PathVariable Long followUserId, @PathVariable("isFollow") Boolean isFollow) {
+    public Result follow(@PathVariable("id") Long followUserId, @PathVariable("isFollow") Boolean isFollow) {
         return followService.follow(followUserId, isFollow);
     }
-    @PutMapping("/or/not/{id}")
-    public Result follow(@PathVariable Long followUserId) {
+    @GetMapping("/or/not/{id}")
+    public Result isFollow(@PathVariable("id") Long followUserId) {
         return followService.isFollow(followUserId);
     }
 }

@@ -9,7 +9,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/comment_db?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&allowPublicKeyRetrieval=true
   redis:
-    host: 192.168.85.134
+    host: 192.168.85.135
     port: 6379
     password: 123456
     lettuce:
