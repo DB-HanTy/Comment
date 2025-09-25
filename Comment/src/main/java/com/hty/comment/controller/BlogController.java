@@ -59,4 +59,9 @@ public class BlogController {
     public Result queryBlogLikes(@PathVariable("id") Long id) {
         return blogService.queryBlogByLikes(id);
     }
+
+    @GetMapping("/of/follow")
+    public Result queryBlogOfFollow(@RequestParam("lastId") Long max,@RequestParam("offset") Integer offset) {
+        return blogService.queryBlogOfFollow(max, offset);
+    }
 }
